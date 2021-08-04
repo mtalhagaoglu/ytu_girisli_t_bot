@@ -43,20 +43,12 @@ def groups(update, context):
 def start(update, context):
     first_name = update["message"]["chat"]["first_name"]
     update.message.reply_text(f"Merhaba {first_name}!\nGruplara katılabilmen için https://forms.gle/4C24TSRFMSBRLRoAA formu doldurmalısın! Sonrasında /gruplar komutu ile katılabileceğin Whatsapp ve Telegram gruplarının bağlantılarını alabilirsin!")
-
-def test(update,context):
-    for i in wa_links:
-        if(i[0] == "Kontrol ve Otomasyon Mühendisliği Lisans Programı"):
-            update.message.reply_text(i)
-            break
-
 def main():
     updater = Updater(token, use_context=True)
     dp = updater.dispatcher
 
     dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("gruplar", groups))
-    dp.add_handler(CommandHandler("test", test))
     dp.add_error_handler(error)
 
     updater.start_polling()
