@@ -20,7 +20,7 @@ def search_someone(username,_try = 0):
         index = 0
         for i in students_list:
             if(index):
-                if(username == i[4] or username == f"@{i[4]}"):
+                if(username == i[4].replace("@","")):
                     return i
             index = index + 1
         if(not _try):
