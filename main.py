@@ -43,7 +43,7 @@ def commands(update,context):
      update.message.reply_text(f"Bot ile kullanabileceğin komutlar şu şekilde:\n /gruplar => Bölümünle ilgili gruplara girmeni sağlar\n /komutlar => Bot ile kullanabileceğin komutları görmeni sağlar\n /linkler => Okul hayatında yardımcı olabilecek linkleri görebilirsin")
     
 def links(update,context):
-    update.message.reply_text(f"Yıldızlıların mobil uygulması, Yıldız Cep! https://yildizcep.com")
+    update.message.reply_text(f"Yıldızlıların mobil uygulaması, Yıldız Cep! https://yildizcep.com")
 
 def start(update, context):
     first_name = update["message"]["chat"]["first_name"]
