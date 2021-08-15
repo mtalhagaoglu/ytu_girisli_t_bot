@@ -24,7 +24,7 @@ def error(update, context):
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def groups(update, context):
-    chat_data = update["message"]["chat"]
+    chat_data = update["message"]["from_user"]
     try:
         result = search_someone(chat_data["username"])
         if(result):
@@ -35,7 +35,7 @@ def groups(update, context):
                     return 
             update.message.reply_text("Bölümün için kurulmuş grup bulamadık! Bizimle sosyal medya hesaplarımı üzerinden iletişime geç!")
         else:
-            update.message.reply_text("Adına bir başvuru bulamadık. Formu tekrar doldurur musun?\n\nhttps://forms.gle/4C24TSRFMSBRLRoAA")
+            update.message.reply_text(f"Üzgünüm {chat_data.first_name} ama adına bir başvuru bulamadık. Formu tekrar doldurur musun?\n\nhttps://forms.gle/4C24TSRFMSBRLRoAA")
     except NameError as e:
         update.message.reply_text(f"Bir sorunla karşılaştık :'( en kısa zamanda çözmeye çalışacağız")
 
@@ -43,11 +43,12 @@ def commands(update,context):
      update.message.reply_text(f"Bot ile kullanabileceğin komutlar şu şekilde:\n /gruplar => Bölümünle ilgili gruplara girmeni sağlar\n /komutlar => Bot ile kullanabileceğin komutları görmeni sağlar\n /linkler => Okul hayatında yardımcı olabilecek linkleri görebilirsin")
     
 def links(update,context):
-    update.message.reply_text(f"Yıldızlıların mobil uygulaması, Yıldız Cep! https://yildizcep.com")
+    update.message.reply_text(f"Bizi sosyal medya hesaplarımızdan takip edebilirsin:\nhttps://www.instagram.com/ytu2021giris/\nhttps://twitter.com/ytu2021giris/\n\nBölüm hakkında sorularını Pusulam Yıldız'a iletebilirsin:\nhttps://bit.ly/3yOV4mM\n\nYıldızlıların mobil uygulaması, Yıldız Cep!\nhttps://yildizcep.com")
 
 def start(update, context):
-    first_name = update["message"]["chat"]["first_name"]
+    first_name = update["message"]["from_user"]["first_name"]
     update.message.reply_text(f"Merhaba {first_name}!\nGruplara katılabilmen için https://forms.gle/4C24TSRFMSBRLRoAA formu doldurmalısın! Sonrasında /gruplar komutu ile katılabileceğin Whatsapp ve Telegram gruplarının bağlantılarını alabilirsin!\n\n Kullanabileceğin diğer komutlar için /komutlar")
+
 
 def main():
     updater = Updater(token, use_context=True)
@@ -57,6 +58,7 @@ def main():
     dp.add_handler(CommandHandler("gruplar", groups))
     dp.add_handler(CommandHandler("komutlar", commands))
     dp.add_handler(CommandHandler("linkler", links))
+    dp.add_handler(CommandHandler("help",commands))
 
     dp.add_error_handler(error)
 
