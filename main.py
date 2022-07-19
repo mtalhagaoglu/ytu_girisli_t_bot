@@ -26,6 +26,7 @@ def error(update, context):
 def groups(update, context):
     chat_data = update["message"]["from_user"]
     update.message.reply_text(f"Üzünüm {chat_data.first_name}, daha gruplar açılmadı. Lütfen daha sonra tekrar dene!")
+    return null
     try:
         result = search_someone(chat_data["username"])
         if(result):
