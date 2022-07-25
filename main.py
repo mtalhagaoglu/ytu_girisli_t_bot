@@ -3,6 +3,7 @@ import logging
 import json
 import csv
 from fetch_form import search_someone
+import random
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
                     level=logging.INFO)
@@ -19,23 +20,44 @@ wa_links_file.close()
 
 token = data["telegram_token"]
 
+def save_user(user):
+    try:
+        with open("users.txt", "a") as f:
+            f.write(f"{user}")
+            f.write("\n")
+    except:
+        print("unable to save user")
+        pass
+
 def error(update, context):
     """Log Errors caused by Updates."""
     logger.warning('Update "%s" caused error "%s"', update, context.error)
 
 def groups(update, context):
     chat_data = update["message"]["from_user"]
-    update.message.reply_text(f"Üzünüm {chat_data.first_name}, daha gruplar açılmadı. Lütfen daha sonra tekrar dene!")
-    return null
     try:
         result = search_someone(chat_data["username"])
         if(result):
+            ybd = result[5]
+            department = result[6]
+            ytu_group = wa_links[random.choice([0,1,2])][1]
+            ybd_group = wa_links[3][1]
             for i in wa_links:
                 if(i[0] == result[6]):
-                    message = "{} için aşağıdaki bölüm gruplarına katılabilirsin!\n\n {}\n\nFakülte grupları için de aşağıdaki bağlantıları kullanabilirsin!\n\n{}\n\nGenel okul gruplarına katılmayı da unutma ;)\n\n{}".format(i[0],i[1].replace(" ","\n"),i[2].replace(" ","\n"),f"{i[3]}\nhttps://t.me/ytu2022girisliler")
+                    faculty_link = "Üzgünüz bu grup kurulmadı. Kurulması için moderatöre mesaj atabilirsin!"
+                    department_link = "Üzgünüz bu grup kurulmadı. Kurulması için moderatöre mesaj atabilirsin!"
+                    try:
+                        faculty_link = i[1]
+                    except IndexError:
+                        pass
+                    try:
+                        department_link = i[2]
+                    except IndexError:
+                        pass
+                    message = f"{department} için oluşturduğumuz genel, fakülte ve bölüm gruplar bağlantılarını aşağıda bulabilirsin!\n\nGenel Grup\n{ytu_group}\n\nFakülte Grup\n{faculty_link}\n\nBölüm Grup\n{department_link}\n\n{f'Hazırlık {ybd_group}' if ybd == 'Evet' or ybd == 'Sınavın sonucuna bağlı' else ''}"
                     update.message.reply_text(message)
                     return 
-            update.message.reply_text("Bölümün için kurulmuş grup bulamadık! Bizimle sosyal medya hesaplarımı üzerinden iletişime geç!")
+            update.message.reply_text("Bölümün için kurulmuş grup bulamadık! Lütfen moderatörle iletişime geçin!")
         else:
             update.message.reply_text(f"Üzgünüm {chat_data.first_name} ama adına bir başvuru bulamadık. Formu tekrar doldurur musun?\n\nhttps://forms.gle/TydAkAM2xS4TdVJp7")
     except NameError as e:
@@ -50,6 +72,7 @@ def links(update,context):
 def start(update, context):
     first_name = update["message"]["from_user"]["first_name"]
     update.message.reply_text(f"Selam {first_name}!\n\nKullanabileceğin diğer komutlar için /komutlar")
+    save_user(update)
 
 
 def main():
