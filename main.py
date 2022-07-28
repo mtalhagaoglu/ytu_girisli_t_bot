@@ -18,6 +18,10 @@ wa_links_file = open("gruplar.csv",encoding='utf-8')
 wa_links = list(csv.reader(wa_links_file,delimiter=','))
 wa_links_file.close()
 
+related_links_file = open("related.csv",encoding="utf-8")
+related_links = list(csv.reader(related_links_file,delimiter='\t'))
+related_links_file.close()
+
 token = data["telegram_token"]
 
 def save_user(user):
@@ -74,15 +78,26 @@ def start(update, context):
     update.message.reply_text(f"Selam {first_name}!\n\nKullanabileceğin diğer komutlar için /komutlar")
     save_user(update)
 
+def related(update,context):
+    try:
+        word = update.message.text.replace("/anahtar ","")
+        for i in related_links:
+            if(word.lower() in i[0].lower()):
+                update.message.reply_text(f"'{word}' anahtar kelimesiyle ilgili aşağıdaki linkleri bulduk!\n\n{i[1]}")
+                return
+        update.message.reply_text(f"'{word}' anahtar kelimesiyle ilgili link bulamadık! Bu anahtar kelimeyle ilgili önerilerini moderatörlere iletebilirsin!")
+    except Exception as e:
+        update.message.reply_text(f"Örnek kullanım şekli: /anahtar medikal {str(e)}")
 
 def main():
     updater = Updater(token, use_context=True)
     dp = updater.dispatcher
 
-    dp.add_handler(CommandHandler("selam", start))
+    dp.add_handler(CommandHandler("start", start))
     dp.add_handler(CommandHandler("gruplar", groups))
     dp.add_handler(CommandHandler("komutlar", commands))
     dp.add_handler(CommandHandler("linkler", links))
+    dp.add_handler(CommandHandler("anahtar", related))
     dp.add_handler(CommandHandler("help",commands))
 
     dp.add_error_handler(error)
