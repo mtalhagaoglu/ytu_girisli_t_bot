@@ -90,7 +90,11 @@ def related(update,context):
         update.message.reply_text(f"Örnek kullanım şekli: /anahtar medikal {str(e)}")
 
 def yardim(update,context):
-    update.message.reply_text("Beni nasıl kullanabileceğini aşağıdaki bilgiselinden öğrenebilirisin!\\nhttps://twitter.com/ytu2022girisli/status/1553336627703042048?s=20&t=3hCh0Kul_hb1yOA7ytEu9A")
+    update.message.reply_text("Beni nasıl kullanabileceğini aşağıdaki bilgiselinden öğrenebilirisin!\n\nhttps://twitter.com/ytu2022girisli/status/1553336627703042048?s=20&t=3hCh0Kul_hb1yOA7ytEu9A")
+
+def video(update,context):
+    text = f"YTÜ Kampüs Turu \n\nYTÜ Yıldız- Davutpaşa Kampüs Turu -Alişo Yollarda \nhttps://youtu.be/9evKCvJK_r0\n\nYTÜ Davutpaşa Kampüs Turu - İEEE Kulübü \nhttps://youtu.be/yCLk1ZHFaOw \n\nYTÜ Davutpaşa Kampüs Turu - Deniz Seden Zengi \n\nhttps://youtu.be/-1gpOr9bkP0\n\nYTÜ Yıldız Kampüs Turu - Rana Toprak \n\nhttps://youtu.be/fw0KSSjFekY\n\nYTÜ Makine Mühendisliği Bölüm Tanıtımı- Makine Teknolojileri Kulübü \n\nhttps://youtu.be/MEepEvmu6R8\n\nYTÜ Matematik Mühendisliği Bölüm Tanıtımı - SKY Lab Kulübü \n\nhttps://youtu.be/dTI3dKie7fA\n\nYTÜ Endüstri Mühendisliği Bölüm Tanıtımı- SKY Lab Kulübü \n\nhttps://youtu.be/RxDX5Hlm7PI\n\nYTÜ Bilgisayar Mühendisliği Bölüm Tanıtımı - SKY Lab Kulübü \n\nhttps://youtu.be/-0vERbpFlZg\n\nYTÜ Fatih Sultan Mehmet Erkek Öğrenci Yurdu - Alişo Yollarda \n\nhttps://youtu.be/dAovTA1Stuw"
+    update.message.reply_text(text)
 
 def main():
     updater = Updater(token, use_context=True)
@@ -102,6 +106,7 @@ def main():
     dp.add_handler(CommandHandler("linkler", links))
     dp.add_handler(CommandHandler("anahtar", related))
     dp.add_handler(CommandHandler("yardim",yardim))
+    dp.add_handler(CommandHandler("video",video))
 
     dp.add_error_handler(error)
 
