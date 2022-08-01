@@ -58,7 +58,7 @@ def groups(update, context):
                         department_link = i[2]
                     except IndexError:
                         pass
-                    message = f"{department} için oluşturduğumuz genel, fakülte ve bölüm gruplar bağlantılarını aşağıda bulabilirsin!\n\nGenel Grup\n{ytu_group}\n\nFakülte Grup\n{faculty_link}\n\nBölüm Grup\n{department_link}\n\n{f'Hazırlık {ybd_group}' if ybd == 'Evet' or ybd == 'Sınavın sonucuna bağlı' else ''}"
+                    message = f"{department} için oluşturduğumuz genel, fakülte ve bölüm gruplar bağlantılarını aşağıda bulabilirsin!\n\nGenel Grup\n{ytu_group}\n\nFakülte Grup\n{faculty_link}\n\nBölüm Grup\n{department_link}\n\n{f'Hazırlık {ybd_group}' if ybd == 'Evet' or ybd == 'Sınavın sonucuna bağlı' else ''}\n\nTelegram grubumuzu da unutma! https://t.me/ytu2022girisli"
                     update.message.reply_text(message)
                     return 
             update.message.reply_text("Bölümün için kurulmuş grup bulamadık! Lütfen moderatörle iletişime geçin!")
@@ -68,7 +68,7 @@ def groups(update, context):
         update.message.reply_text(f"Bir sorunla karşılaştık :'( en kısa zamanda çözmeye çalışacağız")
 
 def commands(update,context):
-     update.message.reply_text(f"Bot ile kullanabileceğin komutlar şu şekilde:\n /gruplar => Bölümünle ilgili gruplara girmeni sağlar\n /komutlar => Bot ile kullanabileceğin komutları görmeni sağlar\n /linkler => Okul hayatında yardımcı olabilecek linkleri görebilirsin")
+     update.message.reply_text(f"Bot ile kullanabileceğin komutlar şu şekilde:\n /gruplar => Bölümünle ilgili gruplara girmeni sağlar\n /komutlar => Bot ile kullanabileceğin komutları görmeni sağlar\n /linkler => Okul hayatında yardımcı olabilecek linkleri görebilirsin\n /anahtar kelime => kelime ile ilgili kulüp ve topluluk paylaşımları")
     
 def links(update,context):
     update.message.reply_text(f"Bizi sosyal medya hesaplarımızdan takip edebilirsin:\nhttps://www.instagram.com/ytu2022girisli/\nhttps://twitter.com/ytu2022girisli/\n\nYıldızlıların sosyal medyadaki sesi\nhttps://twitter.com/nocontextytu\n\nYıldızlıların mobil uygulaması, Yıldız Cep!\nhttps://yildizcep.com")
@@ -89,6 +89,9 @@ def related(update,context):
     except Exception as e:
         update.message.reply_text(f"Örnek kullanım şekli: /anahtar medikal {str(e)}")
 
+def yardim(update,context):
+    update.message.reply_text("Beni nasıl kullanabileceğini aşağıdaki bilgiselinden öğrenebilirisin!\\nhttps://twitter.com/ytu2022girisli/status/1553336627703042048?s=20&t=3hCh0Kul_hb1yOA7ytEu9A")
+
 def main():
     updater = Updater(token, use_context=True)
     dp = updater.dispatcher
@@ -98,7 +101,7 @@ def main():
     dp.add_handler(CommandHandler("komutlar", commands))
     dp.add_handler(CommandHandler("linkler", links))
     dp.add_handler(CommandHandler("anahtar", related))
-    dp.add_handler(CommandHandler("help",commands))
+    dp.add_handler(CommandHandler("yardim",yardim))
 
     dp.add_error_handler(error)
 
