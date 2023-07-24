@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { Telegraf, Markup, session } from "telegraf";
 import { addUser, updateUserInfo, getUser } from "./db.js";
-
+import { downloadSheet, controlSheet } from "./sheet.js";
 import config from "./config.json" assert { type: "json" };
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -60,13 +60,73 @@ bot.command("komutlar", (ctx) => {
   );
 });
 
+bot.command("formkontrol", async (ctx) => {
+  const username = ctx.from.username;
+  if (!username) {
+    ctx.reply(
+      "Kullanıcı adın olmadan Google Form ile kayıt olamazsın. Lütfen Telegram ayarlarından bir kullanıcı adı belirle yada bot ile kayıt ol."
+    );
+    return;
+  }
+  const user = await controlSheet(username);
+  if (!user) {
+    ctx.reply("Google Form ile kayıt olmamışsın.");
+    return;
+  }
+  await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"]);
+  await updateUserInfo(
+    ctx.from.id,
+    "email",
+    user["Aktif Olarak Kullandığınız E-Mail Adresiniz"]
+  );
+  await updateUserInfo(
+    ctx.from.id,
+    "department",
+    user["Kazandığınız Bölümü Seçiniz"]
+  );
+  await updateUserInfo(
+    ctx.from.id,
+    "ybd",
+    user["Hazırlık Okumayı Düşünüyor Musunuz?"]
+  );
+  await updateUserInfo(
+    ctx.from.id,
+    "phoneNumber",
+    user["Telefon Numarası"].toString()
+  );
+  await updateUserInfo(
+    ctx.from.id,
+    "mobileOs",
+    user["Mobil cihazınızda hangi işletim sistemini kullanıyorsunuz?"]
+  );
+  await updateUserInfo(
+    ctx.from.id,
+    "advert",
+    user["Yıldızlılara özel kampanyalardan haberdar olmak ister misiniz?"] ===
+      "Evet"
+  );
+  ctx.reply("Kaydın tamamlandı. /gruplar komutu ile gruplara ulaşabilirsin.");
+});
+
 bot.on("text", (ctx) => {
   const userReply = ctx.message.text;
   const step = ctx?.session?.step || 0;
   switch (step) {
     case 1:
       if (userReply === "Google Form") {
-        ctx.reply("NOT IMPLEMENTED YET");
+        const user = ctx.from;
+        if (!user.username) {
+          ctx.reply(
+            "Kullanıcı adın olmadan Google Form ile kayıt olamazsın. Lütfen Telegram ayarlarından bir kullanıcı adı belirle yada bot ile kayıt ol."
+          );
+          return;
+        }
+        ctx.reply(
+          `Kaydını Google Form üzerinden devam ettirmek için aşağıdaki bağlantıya tıklayabilirsin:\n\nhttps://docs.google.com/forms/d/e/1FAIpQLSfCnUmyqaW__hkCuM31okpnQGiC4oYFyZuD7AzVv8B5MYk0sg/viewform?usp=pp_url&entry.889610041=${user.username}`
+        );
+        ctx.reply(
+          "Kaydını tamamladıktan sonra /formkontrol komutu ile kaydını kontrol edebilir daha sonrasında /gruplar ile bölümün ile ilgili grup bağlantılarına erişebilirsin!"
+        );
       } else if (userReply === "Bot") {
         ctx.reply("İsmin nedir?");
         ctx.session.step = 2;
@@ -100,9 +160,22 @@ bot.on("text", (ctx) => {
     case 7:
       updateUserInfo(ctx.from.id, "mobileOs", userReply);
       ctx.reply(
+        "Yıldızlılara özel kampanyalardan haberdar olmak ister misin?",
+        getYesOrNoKeyboard()
+      );
+      ctx.session.step = 8;
+      break;
+    case 8:
+      updateUserInfo(ctx.from.id, "advert", userReply === "Evet");
+      ctx.editMessageReplyMarkup();
+      ctx.reply(
         "Teşekkürler! Kaydın tamamlandı. /gruplar komutu ile bölümün ile ilgili gruplara ulaşabilirsin."
       );
+      ctx.session.step = 0;
     default:
+      ctx.reply(
+        "/komutlar komutu ile kullanabileceğin komutları görebilirsin."
+      );
       break;
   }
 });
