@@ -1,0 +1,17 @@
+{
+  "name": "botV2",
+  "type": "module",
+  "version": "1.0.0",
+  "main": "./src/app.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node ./src/app.js",
+    "dev": "nodemon ./src/app.js",
+    "db": "npx prisma migrate dev"
+  },
+  "dependencies": {
+    "@prisma/client": "5.0.0",
+    "dotenv": "^16.3.1",
+    "telegraf": "^4.12.2"
+  }
+}
