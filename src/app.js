@@ -1,7 +1,11 @@
 import "dotenv/config";
 import { Telegraf, Markup, session } from "telegraf";
 import { addUser, updateUserInfo, getUser } from "./db.js";
-import { downloadSheet, controlSheet } from "./sheet.js";
+import {
+  downloadSheet,
+  controlSheet,
+  findGroupsByDepartmentName,
+} from "./sheet.js";
 import config from "./config.json" assert { type: "json" };
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -39,7 +43,24 @@ bot.command("gruplar", async (ctx) => {
     ctx.reply("Önce /kayit komutu ile kayıt olmalısın.");
     return;
   }
-  ctx.reply(`${department} ile ilgili gruplar:\n\nNOT IPLEMENTED YET`);
+  const gruplar = await findGroupsByDepartmentName(department);
+  if (gruplar?.length) {
+    ctx.reply(
+      `${department} ile ilgili grupları aşağıda bulabilirsin!\n\nFakülte Whatsapp Grubu: ${
+        gruplar[1]
+      }\n\nBölüm Whatsapp Grubu: ${
+        gruplar[2]
+      }\n\nGenel 2023 Girişliler Whatsap Grubu: ${gruplar[4]}${
+        user.ybd
+          ? `\n\nHazırlık okumayı düşündüğün için dilersen hazırlık grubuna da katılabilirsin: ${gruplar[3]}`
+          : ""
+      }`
+    );
+    return;
+  }
+  ctx.reply(
+    `${department} ile ilgili grup bulunamadı lütfen admin ile iletişime geçmeye çalış.`
+  );
 });
 
 bot.command("yardim", (ctx) => {
@@ -71,6 +92,9 @@ bot.command("formkontrol", async (ctx) => {
   const user = await controlSheet(username);
   if (!user) {
     ctx.reply("Google Form ile kayıt olmamışsın.");
+    ctx.reply(
+      `Kayıt olurken doğru kullanıcı adını kullandığına emin ol.\n\nTelegram kullaıcı adın: ${username}`
+    );
     return;
   }
   await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"]);
@@ -167,11 +191,11 @@ bot.on("text", (ctx) => {
       break;
     case 8:
       updateUserInfo(ctx.from.id, "advert", userReply === "Evet");
-      ctx.editMessageReplyMarkup();
       ctx.reply(
         "Teşekkürler! Kaydın tamamlandı. /gruplar komutu ile bölümün ile ilgili gruplara ulaşabilirsin."
       );
       ctx.session.step = 0;
+      break;
     default:
       ctx.reply(
         "/komutlar komutu ile kullanabileceğin komutları görebilirsin."
