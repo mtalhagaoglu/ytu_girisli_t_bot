@@ -1,0 +1,9 @@
+{
+    "apps": [
+        {
+            "name": "YTU_BOT",
+            "script": "npm",
+            "args": "start"
+        }
+    ]
+}
