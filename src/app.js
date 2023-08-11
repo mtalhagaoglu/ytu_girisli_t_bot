@@ -85,7 +85,7 @@ bot.command("videolar", (ctx) => [
 
 bot.command("komutlar", (ctx) => {
   ctx.reply(
-    `Kullanabileceğin komutlar:\n\n/kayit\n/gruplar\n/yardim\n/linkler`
+    `Kullanabileceğin komutlar:\n\n/kayit\n/gruplar\n/yardim\n/linkler\n/videolar`
   );
 });
 
