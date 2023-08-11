@@ -75,5 +75,99 @@
             "url": "https://twitter.com/nocontextytu"
         }
     ],
+    "videos": [
+        {
+            "title": "Kampüs Turu",
+            "url": "https://www.youtube.com/watch?v=hyNVUK8uIbM"
+        },
+        {
+            "title": "YTÜ’DE Bir Gün Geçirmek",
+            "url": "https://www.youtube.com/watch?v=FnHAm1Gx8eA&t=1144s"
+        },
+        {
+            "title": "YTÜ Hakkında Merak Edilenler",
+            "url": "https://www.youtube.com/watch?v=h1yof-hv6Ik"
+        },
+        {
+            "title": "YTÜ’de Okumak",
+            "url": "https://www.youtube.com/watch?v=Tm1VFsd25dc"
+        },
+        {
+            "title": "YTÜ Hazırlık Okumak",
+            "url": "https://www.youtube.com/watch?v=aiakagbJJqQ"
+        },
+        {
+            "title": "Fransızca Mütercimlik ve Tercümanlık",
+            "url": "https://www.youtube.com/watch?v=zaNXJkWaP30"
+        },
+        {
+            "title": "Elektronik ve haberleşme Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=qEdTLlAgLzM&t=6s"
+        },
+        {
+            "title": "YTÜ’de Okumak",
+            "url": "https://www.youtube.com/watch?v=npHF_aLIcEw"
+        },
+        {
+            "title": "Fizik Bölümü",
+            "url": "https://www.youtube.com/watch?v=OtPSw9ZDfXg"
+        },
+        {
+            "title": "Endüstri Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=igf5XMqwYK4"
+        },
+        {
+            "title": "Endüstri Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=cDlYoLDgVp8"
+        },
+        {
+            "title": "Mimarlık",
+            "url": "https://www.youtube.com/watch?v=umBJ3QAAI2E"
+        },
+        {
+            "title": "Bilgisayar Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=jIxtwCaqVm4"
+        },
+        {
+            "title": "Matematik Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=ADCdZaGF2XY"
+        },
+        {
+            "title": "Kimya",
+            "url": "https://www.youtube.com/watch?v=uVxq4-CsS9Y"
+        },
+        {
+            "title": "Metalurji ve Malzeme Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=h918KeYnKoQ"
+        },
+        {
+            "title": "Fotoğraf ve Video",
+            "url": "https://www.youtube.com/watch?v=anquMcth-o0"
+        },
+        {
+            "title": "Kimya Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=QxT7BR8tQtw"
+        },
+        {
+            "title": "Matematik Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=uHFev40IlCA&t=525s"
+        },
+        {
+            "title": "Makine Mühendisliği",
+            "url": "https://www.youtube.com/watch?v=MEepEvmu6R8"
+        },
+        {
+            "title": "Biyomühendislik",
+            "url": "https://www.youtube.com/watch?v=iuIjuFHLULQ"
+        },
+        {
+            "title": "YTÜ Eğitim Fakültesi",
+            "url": "https://www.youtube.com/watch?v=fK5ZQ0UjvgQ"
+        },
+        {
+            "title": "Z Mezuniyet",
+            "url": "https://www.youtube.com/watch?v=OVZVXyoh4DA"
+        }
+    ],
     "google_form": "https://forms.gle/nQLUiKDgs3XsvRbp8"
 }

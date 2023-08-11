@@ -75,6 +75,14 @@ bot.command("linkler", (ctx) => [
   ),
 ]);
 
+bot.command("videolar", (ctx) => [
+  ctx.reply(
+    `İşte işine yarayabilecek bazı videolar:\n\n${config.videos
+      .map(({ title, url }) => `${title}\n${url}`)
+      .join("\n\n")}`
+  ),
+]);
+
 bot.command("komutlar", (ctx) => {
   ctx.reply(
     `Kullanabileceğin komutlar:\n\n/kayit\n/gruplar\n/yardim\n/linkler`
