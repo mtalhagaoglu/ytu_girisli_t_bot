@@ -10,10 +10,11 @@ async function downloadSheet() {
 }
 
 async function controlSheet(username) {
+  if (!username) return false;
   const data = await downloadSheet();
   const user = data.find(
     (userData) =>
-      userData["Telegram Kullanıcı Adınız"].toLowerCase().trim() ===
+      userData["Telegram Kullanıcı Adınız"]?.toLowerCase().trim() ===
       username.toLowerCase().trim()
   );
   if (!user) return false;
