@@ -22,7 +22,7 @@ model User {
   telegramId       BigInt   @unique
   telegramFullName String
   telegramUsername String?
-  telegramChatId   Int
+  telegramChatId   BigInt
   advert           Boolean  @default(false)
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
