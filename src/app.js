@@ -199,6 +199,14 @@ bot.on("text", (ctx) => {
       ctx.session.step = 6;
       break;
     case 6:
+      // check the phone number with regex
+      const checkPhoneNumber =
+        /^(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*(\d{3})\s*\)|(\d{3}))\s*(?:[.-]\s*)?(\d{3})\s*(?:[.-]\s*)?(\d{4})$/;
+      if (!checkPhoneNumber.test(userReply)) {
+        ctx.reply("Lütfen geçerli bir telefon numarası gir.");
+        ctx.session.step = 5;
+        return;
+      }
       updateUserInfo(ctx.from.id, "phoneNumber", userReply);
       ctx.reply("Hangi telefonu kullanıyorsun?", getPhoneOsKeyboard());
       ctx.session.step = 7;
