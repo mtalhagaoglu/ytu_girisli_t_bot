@@ -1,6 +1,6 @@
 import "dotenv/config";
 import { Telegraf, Markup, session } from "telegraf";
-import { addUser, updateUserInfo, getUser } from "./db.js";
+import { addUser, updateUserInfo, getUser, countUser } from "./db.js";
 import {
   downloadSheet,
   controlSheet,
@@ -64,7 +64,9 @@ bot.command("gruplar", async (ctx) => {
 });
 
 bot.command("yardim", (ctx) => {
-  ctx.reply("NOT IMPLEMENTED YET");
+  ctx.reply(
+    `Merhaba 👋 Yıldız’a hoş geldin. Aklına takılan konularda sana yardımcı olacak bilgiler burada yer alıyor.\n\nWhatsapp Gruplarına katılmak için bot üzerinden  iletişime geç https://t.me/ytu2023girisliler_bot\n\nÖncelikle kayıt işlemleri hakkında bilgi almak ve kayıtların nasıl yapılacağını öğrenmek için buraya bakabilirsin: (Kayıtlar 28-30 Ağustos tarihlerinde yapılacaktır.) https://ogi.yildiz.edu.tr/duyurular/2023-YKS-%C4%B0le-%C3%9Cniversitemize-Kay%C4%B1t-Hakk%C4%B1-Kazanan-%C3%96%C4%9Frenciler/458\n\nYatay Geçiş, MYP, Kurum İçi Geçiş ve diğer geçiş işlemleri hakkında bilgi almak için buraya bakabilirsin: https://ogi.yildiz.edu.tr/duyurular/2023-2024-YT%C3%9C-Lisans-D%C3%BCzeyindeki-Programlar-Aras%C4%B1nda-Ge%C3%A7i%C5%9F/456\n\nBölümün %30 veya %100 İngilizce ise hazırlık ve yabancı dil yeterlilik sınavı hakkında bilgi almak için buraya bakabilirsin: https://ybd.yildiz.edu.tr/\n\nDers planın ve alacağın dersler hakkında bilgi edinmek için buraya bakabilirsin: http://www.bologna.yildiz.edu.tr/index.php?r=program/bachelor\n\nBunlar haricinde de aklına takılan durumlar olduğunda bize sosyal medya hesaplarımızdan yazabilirsin.`
+  );
 });
 
 bot.command("linkler", (ctx) => [
@@ -87,6 +89,18 @@ bot.command("komutlar", (ctx) => {
   ctx.reply(
     `Kullanabileceğin komutlar:\n\n/kayit\n/gruplar\n/yardim\n/linkler\n/videolar`
   );
+});
+
+bot.command("count", async (ctx) => {
+  const username = ctx.from.username;
+  const admins = ["ytu2023girisliler", "agaoglutalha"];
+  if (!admins.includes(username) || !username) {
+    return null;
+  }
+  const count = await downloadSheet();
+  ctx.reply(`Google Form ile kayıt sayısı: ${count}`);
+  const dbCount = await countUser();
+  ctx.reply(`Bot üzerinden kayıt sayısı: ${dbCount}`);
 });
 
 bot.command("formkontrol", async (ctx) => {

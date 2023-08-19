@@ -79,4 +79,14 @@ async function getUser(telegramId) {
   }
 }
 
-export { addUser, updateUserInfo, getUser };
+async function countUser() {
+  try {
+    const count = await prisma.user.count();
+    return count;
+  } catch (error) {
+    console.warn("User Count Error", error);
+    return null;
+  }
+}
+
+export { addUser, updateUserInfo, getUser, countUser };
