@@ -28,7 +28,9 @@ async function findGroupsByDepartmentName(departmentName) {
     fs.createReadStream(filePath)
       .pipe(parse({ delimiter: ",", from_line: 2 }))
       .on("data", function (row) {
+        console.log(row[0], row[0] === departmentName);
         if (row[0] === departmentName) {
+          console.log("bulundu");
           data = row;
         }
       })
