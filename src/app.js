@@ -201,7 +201,7 @@ bot.on("text", (ctx) => {
     case 6:
       // check the phone number with regex
       const checkPhoneNumber =
-        /^(?:\+?1\s*(?:[.-]\s*)?)?(?:\(\s*(\d{3})\s*\)|(\d{3}))\s*(?:[.-]\s*)?(\d{3})\s*(?:[.-]\s*)?(\d{4})$/;
+        /^(((\+|00)?(90)|0)[-| ]?)?((5\d{2})[-| ]?(\d{3})[-| ]?(\d{2})[-| ]?(\d{2}))$/;
       if (!checkPhoneNumber.test(userReply)) {
         ctx.reply("Lütfen geçerli bir telefon numarası gir.");
         ctx.session.step = 5;
