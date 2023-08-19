@@ -11,17 +11,19 @@ datasource db {
 }
 
 model User {
-  id               Int     @id @default(autoincrement())
+  id               Int      @id @default(autoincrement())
   fullName         String?
-  email            String? @unique
+  email            String?  @unique
   phoneNumber      String?
-  school           String? @default("ytü")
+  school           String?  @default("ytü")
   department       String?
   mobileOs         String?
   ybd              String?
-  telegramId       Int     @unique
+  telegramId       BigInt   @unique
   telegramFullName String
   telegramUsername String?
   telegramChatId   Int
-  advert           Boolean @default(false)
+  advert           Boolean  @default(false)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 }
