@@ -98,7 +98,7 @@ bot.command("count", async (ctx) => {
     return null;
   }
   const count = await downloadSheet();
-  ctx.reply(`Google Form ile kayıt sayısı: ${count}`);
+  ctx.reply(`Google Form ile kayıt sayısı: ${count.length}`);
   const dbCount = await countUser();
   ctx.reply(`Bot üzerinden kayıt sayısı: ${dbCount}`);
 });
