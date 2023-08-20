@@ -81,8 +81,18 @@ async function getUser(telegramId) {
 
 async function countUser() {
   try {
-    const count = await prisma.user.count();
-    return count;
+    const withPhoneNumber = await prisma.user.count({
+      where: {
+        phoneNumber: {
+          not: null,
+        },
+      },
+    });
+    const all = await prisma.user.count();
+    return {
+      withPhoneNumber,
+      all,
+    };
   } catch (error) {
     console.warn("User Count Error", error);
     return null;

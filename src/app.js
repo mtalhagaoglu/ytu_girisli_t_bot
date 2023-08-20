@@ -99,8 +99,11 @@ bot.command("count", async (ctx) => {
   }
   const count = await downloadSheet();
   ctx.reply(`Google Form ile kayıt sayısı: ${count.length}`);
-  const dbCount = await countUser();
-  ctx.reply(`Bot üzerinden kayıt sayısı: ${dbCount}`);
+  const { withPhoneNumber, all } = await countUser();
+  ctx.reply(
+    `Veritabanına kayıtlı, telefon numarası var olan kullanıcı sayısı: ${withPhoneNumber}`
+  );
+  ctx.reply(`Bot ile konuşmuş bütün kullanıcıların sayısı: ${all}`);
 });
 
 bot.command("formkontrol", async (ctx) => {
@@ -199,7 +202,6 @@ bot.on("text", (ctx) => {
       ctx.session.step = 6;
       break;
     case 6:
-      // check the phone number with regex
       const checkPhoneNumber =
         /^(((\+|00)?(90)|0)[-| ]?)?((5\d{2})[-| ]?(\d{3})[-| ]?(\d{2})[-| ]?(\d{2}))$/;
       if (!checkPhoneNumber.test(userReply)) {
