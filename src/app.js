@@ -49,6 +49,7 @@ bot.command("duyuru", adminCheck, async (ctx) => {
   ctx.session = {
     process: "broadcast",
     step: 1,
+    text,
   };
   ctx.reply(
     `${text}\n\n Yukarıdaki metin kayıtlı bütün kullanıcılara gönderilecek onaylıyor musunuz?`,
@@ -56,8 +57,11 @@ bot.command("duyuru", adminCheck, async (ctx) => {
   );
 });
 
-async function sendBroadcastMessage(ctx) {
-  const text = ctx.message.text.replace("/duyuru ", "");
+async function sendBroadcastMessage(ctx, text) {
+  if (!text || text.length <= 0) {
+    ctx.reply("Boş Metin Girilmez");
+    return;
+  }
   let chatIds = await getTelegramChatIds();
   ctx.reply(`${chatIds.length} kişiye mesaj gönderilecek. Başlıyor...`);
   const sendMessage = (index) => {
@@ -200,7 +204,7 @@ bot.on("text", (ctx) => {
   const process = ctx?.session?.process;
   if (process === "broadcast") {
     if (userReply === "Evet") {
-      sendBroadcastMessage(ctx);
+      sendBroadcastMessage(ctx, ctx.session.text);
     } else {
       ctx.reply("İptal edildi.");
     }
