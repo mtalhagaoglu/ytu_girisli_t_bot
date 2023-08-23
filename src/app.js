@@ -208,6 +208,7 @@ bot.on("text", (ctx) => {
     } else {
       ctx.reply("İptal edildi.");
     }
+    ctx.session = {};
     return;
   }
   switch (step) {
@@ -276,7 +277,7 @@ bot.on("text", (ctx) => {
       ctx.reply(
         "Teşekkürler! Kaydın tamamlandı. /gruplar komutu ile bölümün ile ilgili gruplara ulaşabilirsin."
       );
-      ctx.session.step = 0;
+      ctx.session = {};
       break;
     default:
       ctx.reply(
