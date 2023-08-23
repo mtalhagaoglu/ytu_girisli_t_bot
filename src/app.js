@@ -1,12 +1,19 @@
 import "dotenv/config";
 import { Telegraf, Markup, session } from "telegraf";
-import { addUser, updateUserInfo, getUser, countUser } from "./db.js";
+import {
+  addUser,
+  updateUserInfo,
+  getUser,
+  countUser,
+  getTelegramChatIds,
+} from "./db.js";
 import {
   downloadSheet,
   controlSheet,
   findGroupsByDepartmentName,
 } from "./sheet.js";
 import config from "./config.json" assert { type: "json" };
+import { parse } from "dotenv";
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 bot.use(session());
@@ -23,6 +30,7 @@ bot.start((ctx) => {
 
 bot.command("kayit", (ctx) => {
   ctx.session = {
+    process: "register",
     step: 1,
   };
   ctx.reply(`Kayıt sürecini nasıl ilerletmek istersin?`, getKayitKeyboard());
@@ -30,6 +38,40 @@ bot.command("kayit", (ctx) => {
 
 function getKayitKeyboard() {
   return Markup.keyboard(["Google Form", "Bot"]).oneTime().resize();
+}
+
+bot.command("duyuru", adminCheck, async (ctx) => {
+  const text = ctx.message.text.replace("/duyuru ", "");
+  if (text.length <= 0) {
+    ctx.reply("Boş Metin Girilmez");
+    return;
+  }
+  ctx.session = {
+    process: "broadcast",
+    step: 1,
+  };
+  ctx.reply(
+    `${text}\n\n Yukarıdaki metin kayıtlı bütün kullanıcılara gönderilecek onaylıyor musunuz?`,
+    getYesOrNoKeyboard()
+  );
+});
+
+async function sendBroadcastMessage(ctx) {
+  const text = ctx.message.text.replace("/duyuru ", "");
+  let chatIds = await getTelegramChatIds();
+  ctx.reply(`${chatIds.length} kişiye mesaj gönderilecek. Başlıyor...`);
+  const sendMessage = (index) => {
+    if (index >= chatIds.length) {
+      ctx.reply("Mesaj Gönderimi Bitti");
+      return;
+    }
+    const telegramChatId = chatIds[index].telegramChatId;
+    bot.telegram.sendMessage(telegramChatId.toString(), text);
+    setTimeout(() => {
+      sendMessage(index + 1);
+    }, 1000 / 20);
+  };
+  sendMessage(0);
 }
 
 bot.command("gruplar", async (ctx) => {
@@ -91,12 +133,7 @@ bot.command("komutlar", (ctx) => {
   );
 });
 
-bot.command("count", async (ctx) => {
-  const username = ctx.from.username;
-  const admins = ["ytu2023girisliler", "agaoglutalha"];
-  if (!admins.includes(username) || !username) {
-    return null;
-  }
+bot.command("count", adminCheck, async (ctx) => {
   const count = await downloadSheet();
   ctx.reply(`Google Form ile kayıt sayısı: ${count.length}`);
   const { withPhoneNumber, all } = await countUser();
@@ -160,6 +197,15 @@ bot.command("formkontrol", async (ctx) => {
 bot.on("text", (ctx) => {
   const userReply = ctx.message.text;
   const step = ctx?.session?.step || 0;
+  const process = ctx?.session?.process;
+  if (process === "broadcast") {
+    if (userReply === "Evet") {
+      sendBroadcastMessage(ctx);
+    } else {
+      ctx.reply("İptal edildi.");
+    }
+    return;
+  }
   switch (step) {
     case 1:
       if (userReply === "Google Form") {
@@ -249,6 +295,16 @@ function getPhoneOsKeyboard() {
 }
 
 bot.launch();
+
+function adminCheck(ctx, next) {
+  const username = ctx.from.username;
+  const admins = ["ytu2023girisliler", "agaoglutalha"];
+  if (!admins.includes(username) || !username) {
+    ctx.reply("Bu komutu kullanmaya yetkin yok.");
+    return null;
+  }
+  next();
+}
 
 // Enable graceful stop
 process.once("SIGINT", () => bot.stop("SIGINT"));

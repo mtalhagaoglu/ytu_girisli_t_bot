@@ -99,4 +99,18 @@ async function countUser() {
   }
 }
 
-export { addUser, updateUserInfo, getUser, countUser };
+async function getTelegramChatIds() {
+  try {
+    const chatIds = await prisma.user.findMany({
+      select: {
+        telegramChatId: true,
+      },
+    });
+    return chatIds;
+  } catch (error) {
+    console.warn("Telegram Chat Ids Get Error", error);
+    return null;
+  }
+}
+
+export { addUser, updateUserInfo, getUser, countUser, getTelegramChatIds };
