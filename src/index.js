@@ -1,7 +1,5 @@
-import { findGroupsByDepartmentName } from "./sheet.js";
+const phoneNumbers = [];
 
-const group = await findGroupsByDepartmentName(
-  "Bilgisayar ve Öğretim Teknolojileri Eğitimi Lisans Programı"
-);
+async function fetchPhoneNumbers() {}
 
-console.log(group);
+fetchPhoneNumbers();
