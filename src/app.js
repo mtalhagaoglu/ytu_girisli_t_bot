@@ -198,7 +198,7 @@ bot.command("formkontrol", async (ctx) => {
   ctx.reply("Kaydın tamamlandı. /gruplar komutu ile gruplara ulaşabilirsin.");
 });
 
-bot.on("text", (ctx) => {
+bot.on("text", async (ctx) => {
   const userReply = ctx.message.text;
   const step = ctx?.session?.step || 0;
   const process = ctx?.session?.process;
@@ -233,7 +233,12 @@ bot.on("text", (ctx) => {
       }
       break;
     case 2:
-      updateUserInfo(ctx.from.id, "fullName", userReply);
+      const res = await updateUserInfo(ctx.from.id, "fullName", userReply);
+      if (!res) {
+        ctx.reply("/start komutunu kullanarak sohbete yeniden başlamalısın.");
+        ctx.session = {};
+        return;
+      }
       ctx.reply("Aktif kullandığın e-posta adresin nedir?");
       ctx.session.step = 3;
       break;
