@@ -163,7 +163,13 @@ bot.command("formkontrol", async (ctx) => {
     );
     return;
   }
-  await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"]);
+  const res = await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"]);
+  if(!res){
+    const message = ctx.message;
+    const user = message.from;
+    await addUser(user,message.chat)
+    await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"])
+  }
   await updateUserInfo(
     ctx.from.id,
     "email",
