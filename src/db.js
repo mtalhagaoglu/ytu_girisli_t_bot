@@ -88,10 +88,16 @@ async function countUser() {
         },
       },
     });
+    const adPermission = await prisma.user.count({
+      where: {
+        advert: true,
+      },
+    });
     const all = await prisma.user.count();
     return {
       withPhoneNumber,
       all,
+      adPermission,
     };
   } catch (error) {
     console.warn("User Count Error", error);
@@ -99,9 +105,10 @@ async function countUser() {
   }
 }
 
-async function getTelegramChatIds() {
+async function getTelegramChatIds(options) {
   try {
     const chatIds = await prisma.user.findMany({
+      ...options,
       select: {
         telegramChatId: true,
       },

@@ -52,7 +52,7 @@ bot.command("duyuru", adminCheck, async (ctx) => {
     text,
   };
   ctx.reply(
-    `${text}\n\n Yukarıdaki metin kayıtlı bütün kullanıcılara gönderilecek onaylıyor musunuz?`,
+    `${text}\n\n Yukarıdaki metin reklam izni veren bütün kullanıcılara gönderilecek onaylıyor musunuz?`,
     getYesOrNoKeyboard()
   );
 });
@@ -62,7 +62,11 @@ async function sendBroadcastMessage(ctx, text) {
     ctx.reply("Boş Metin Girilmez");
     return;
   }
-  let chatIds = await getTelegramChatIds();
+  let chatIds = await getTelegramChatIds({
+    select: {
+      advert: true,
+    },
+  });
   ctx.reply(`${chatIds.length} kişiye mesaj gönderilecek. Başlıyor...`);
   const sendMessage = (index) => {
     if (index >= chatIds.length) {
@@ -140,10 +144,11 @@ bot.command("komutlar", (ctx) => {
 bot.command("count", adminCheck, async (ctx) => {
   const count = await downloadSheet();
   ctx.reply(`Google Form ile kayıt sayısı: ${count.length}`);
-  const { withPhoneNumber, all } = await countUser();
+  const { withPhoneNumber, all, adPermission } = await countUser();
   ctx.reply(
     `Veritabanına kayıtlı, telefon numarası var olan kullanıcı sayısı: ${withPhoneNumber}`
   );
+  ctx.reply(`Reklam izni veren kullanıcı sayısı: ${adPermission}`);
   ctx.reply(`Bot ile konuşmuş bütün kullanıcıların sayısı: ${all}`);
 });
 
@@ -163,12 +168,16 @@ bot.command("formkontrol", async (ctx) => {
     );
     return;
   }
-  const res = await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"]);
-  if(!res){
+  const res = await updateUserInfo(
+    ctx.from.id,
+    "fullName",
+    user["İsim, Soyisim"]
+  );
+  if (!res) {
     const message = ctx.message;
     const user = message.from;
-    await addUser(user,message.chat)
-    await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"])
+    await addUser(user, message.chat);
+    await updateUserInfo(ctx.from.id, "fullName", user["İsim, Soyisim"]);
   }
   await updateUserInfo(
     ctx.from.id,
